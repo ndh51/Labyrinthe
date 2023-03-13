@@ -1,6 +1,8 @@
 from random import *
 
 
+### Burlot Brice, Hales Nadhir
+
 class Maze:
     """
     Classe Labyrinthe
@@ -359,7 +361,7 @@ class Maze:
 
 ###    5.1
 
-    def gen_btree(h : int , w : int)-> Maze :
+    def gen_btree(h : int , w : int):
         """
         
 
@@ -393,7 +395,7 @@ class Maze:
     
 ###    5.2 
     
-    def gen_sidewinder(h : int, w : int)-> Maze:
+    def gen_sidewinder(h : int, w : int):
         """
         
 
@@ -439,7 +441,7 @@ class Maze:
     
 ###    5.3
     
-    def gen_fusion(h : int , w : int)-> Maze:
+    def gen_fusion(h : int , w : int):
         """
         
 
@@ -486,7 +488,7 @@ class Maze:
 ###    5.4
     
     
-    def gen_exploration(h : int ,w :int )-> Maze:
+    def gen_exploration(h : int ,w :int ):
         """
         
 
@@ -539,7 +541,7 @@ class Maze:
     
 ###    5.5
     
-    def gen_wilson(h :int ,w: int ) -> Maze:
+    def gen_wilson(h :int ,w: int ): 
         """
         
 
@@ -610,7 +612,9 @@ class Maze:
     
 ##############################################################################
 
+
 ##  PARTIE 6
+
 
 
 ###    6.1    
@@ -664,6 +668,39 @@ class Maze:
         chemin.append(start)
         return chemin
     
+    
+    
+    
+    def solve_bfs(self, start, stop):
+       #initialisation
+       file = [start]
+       lstMarquee = []
+       pred = {start : start}
+       continu = True
+       cellAMarquee = []
+       while len(file) > 0:
+           c = file.pop(0)
+           if c == stop:
+               continu = False
+           else :
+               voisins = self.get_reachable_cells(c)
+               for i in range(len(voisins)):
+                   if voisins[i] not in lstMarquee and voisins[i] not in file:
+                       lstMarquee.append(voisins[i])
+                       file.append(voisins[i])
+                       pred[voisins[i]] = c
+
+       ###get_reachable_cell = 1 cell -> cul de sac
+       #initialisation reconstruction du chemin
+       c = stop
+       chemin = []
+       while c != start:
+           chemin.append(c)
+           c = pred[c]
+       chemin.append(start)
+       return chemin
+
+    
 
 
 ###    6.2
@@ -698,37 +735,73 @@ class Maze:
 
 ###############################################################################
 
-###    PARTIE 6
+###    PARTIE 7
 
-
-
-
-        def distance_man(self,c1:tuple ,c2: tuple )->int :
+    def distance_geo(self, c1: tuple , c2 : tuple )-> int:
             """
             
 
             Parameters
             ----------
             c1 : tuple
-                DESCRIPTION.
+                cellule de depart.
             c2 : tuple
-                DESCRIPTION.
+                cellule d'arrivée.
 
             Returns
             -------
             int
-                DESCRIPTION.
+                nombre minimale de deplacement necessaire pour atteindre c2 depuis c1 en prenant en compte les murs.
 
             """
             
-            return dist
+            chemin = self.solve_dfs(c1, c2)
+            return len(chemin)-1
+
+
+
+
+
+
+    def distance_man(self, c1:tuple ,c2: tuple )->int :
+            """
+            
+
+            Parameters
+            ----------
+            c1 : tuple
+                cellule de depart.
+            c2 : tuple
+                cellule d'arrivée.
+
+            Returns
+            -------
+            int
+                taille du chemin le plus cours sans prendre compte des murs.
+
+            """
+            
+            return abs(c2[0]-c1[0])+abs(c2[1]-c1[1])
             
 
 
 
 
+###############################################################################
 
 
+###            PARTIE 8
+
+
+
+###     8.1
+
+
+
+
+
+
+###     8.2
 
 
 
@@ -739,6 +812,27 @@ class Maze:
 
 """
 
+class color:
+   PURPLE = '\033[95m'
+   CYAN = '\033[96m'
+   DARKCYAN = '\033[36m'
+   BLUE = '\033[94m'
+   GREEN = '\033[92m'
+   YELLOW = '\033[93m'
+   RED = '\033[91m'
+   BOLD = '\033[1m'
+   UNDERLINE = '\033[4m'
+   END = '\033[0m'
+
+"""
+
+Permet l'affichage en couleurs
+
+"""
+
+## PARTIE 3
+
+print(color.RED + color.BOLD +'\n Tests Partie 3 \n\n'+ color.END)
 
 laby = Maze(4, 4, False)
 print(laby.info())
@@ -772,8 +866,13 @@ print(laby, 'test remove walls')
 
 laby.neighbors[(1, 3)].add((2, 3))
 laby.neighbors[(2, 3)].add((1, 3))
-print(laby,' test ajoux de voisins ')
+print(laby,' test ajoux de voisins \n\n')
 
+
+
+## PARTIE 4
+
+print(color.RED + color.BOLD + '\n Tests Partie 4 \n\n' + color.END)
 
 laby = Maze(5, 5, empty=True)
 laby.fill()
@@ -792,12 +891,71 @@ print(laby.get_walls(),'liste des murs')
 
 print(laby.get_contiguous_cells((0, 1)), " cellules contigues")
 
-print(laby.get_reachable_cells((0, 1)),'cellules atteignables')
+print(laby.get_reachable_cells((0, 1)),'cellules atteignables \n\n')
+
+
+
+
+## PARTIE 5
+
+print(color.RED + color.BOLD +'\n Tests Partie 5 \n\n'+ color.END)
 
 laby = Maze.gen_btree(4, 4)
 print(laby, 'arbre binaire')
 
+laby = Maze.gen_sidewinder(4, 4)
+print(laby, 'Sidewinder')
+
 laby = Maze.gen_fusion(4, 4)
 print(laby, 'fusion')
+
+laby = Maze.gen_exploration(15,15)
+print(laby, 'exploration exhaustive')
+
+laby = Maze.gen_wilson(12, 12)
+print(laby,'Wilson \n\n')
+
+
+
+
+## PARTIE 6
+
+print(color.RED + color.BOLD + '\n Tests Partie 6 \n\n' + color.END )
+
+laby = Maze.gen_fusion(15, 15)
+solution = laby.solve_dfs((0, 0), (14, 14))
+str_solution = {c:'*' for c in solution}
+str_solution[( 0,  0)] = 'D'
+str_solution[(14, 14)] = 'A'
+print(laby.overlay(str_solution), "parcours en profondeur")
+
+
+laby = Maze.gen_exploration(15, 15)
+solution = laby.solve_dfs((0, 0), (14, 14))
+str_solution = {c:'*' for c in solution}
+str_solution[( 0,  0)] = 'D'
+str_solution[(14, 14)] = 'A'
+print(laby.overlay(str_solution),"parcours en largeur \n\n")
+
+
+
+
+## partie 7
+
+print(color.RED + color.BOLD + '\n Tests Partie 7 \n\n' + color.END)
+
+
+laby = Maze.gen_exploration(15, 15)
+print(laby.distance_geo((0, 0), (14, 14)),'distance géographique')
+
+
+print(laby.distance_man((0,0),(14,14)),'Manhattan \n\n')
+
+
+## partie 8 
+
+
+
+
 
 
