@@ -1,4 +1,4 @@
-from random import randint
+from random import *
 
 
 class Maze:
@@ -20,25 +20,26 @@ class Maze:
         """
         self.height = height
         self.width = width
-        self.neighbors = {(i, j): set() for i in range(height) for j in range(width)}
+        self.neighbors = {(i, j): set() for i in range(height)
+                          for j in range(width)}
         if empty:
             for i in range(self.height):
                 for j in range(self.width):
-                        if (i + 1) < self.height and 0<=j<self.width and (i + 1, j) not in self.neighbors[(i, j)] and (i, j) not in self.neighbors[(i + 1, j)] :
-                            self.neighbors[(i,j)].add((i+1,j))
-                            self.neighbors[(i+1, j)].add((i, j))
-                            
-                        if (j + 1) < self.width and 0<=i<self.height and (i, j + 1) not in self.neighbors[(i, j)] and (i, j) not in self.neighbors[(i, j + 1)] :
-                            self.neighbors[(i, j+1)].add((i, j))
-                            self.neighbors[(i, j)].add((i, j+1))
-                            
-                        if (i - 1) >= 0 and 0<=j<self.width and (i - 1, j) not in self.neighbors[(i, j)] and (i, j) not in self.neighbors[(i - 1, j)] :
-                            self.neighbors[(i, j)].add((i - 1, j))
-                            self.neighbors[(i - 1, j)].add((i, j))
-                            
-                        if (j - 1) >= 0 and 0<=i<self.height and (i, j - 1) not in self.neighbors[(i, j)] and (i, j)not in self.neighbors[(i, j - 1)] :
-                            self.neighbors[(i, j - 1)].add((i, j))
-                            self.neighbors[(i, j)].add((i, j - 1))
+                    if (i + 1) < self.height and 0 <= j < self.width and (i + 1, j) not in self.neighbors[(i, j)] and (i, j) not in self.neighbors[(i + 1, j)]:
+                        self.neighbors[(i, j)].add((i+1, j))
+                        self.neighbors[(i+1, j)].add((i, j))
+
+                    if (j + 1) < self.width and 0 <= i < self.height and (i, j + 1) not in self.neighbors[(i, j)] and (i, j) not in self.neighbors[(i, j + 1)]:
+                        self.neighbors[(i, j+1)].add((i, j))
+                        self.neighbors[(i, j)].add((i, j+1))
+
+                    if (i - 1) >= 0 and 0 <= j < self.width and (i - 1, j) not in self.neighbors[(i, j)] and (i, j) not in self.neighbors[(i - 1, j)]:
+                        self.neighbors[(i, j)].add((i - 1, j))
+                        self.neighbors[(i - 1, j)].add((i, j))
+
+                    if (j - 1) >= 0 and 0 <= i < self.height and (i, j - 1) not in self.neighbors[(i, j)] and (i, j)not in self.neighbors[(i, j - 1)]:
+                        self.neighbors[(i, j - 1)].add((i, j))
+                        self.neighbors[(i, j)].add((i, j - 1))
 
     def info(self):
         """
@@ -78,17 +79,21 @@ class Maze:
         txt += "━━━┓\n"
         txt += "┃"
         for j in range(self.width - 1):
-            txt += "   ┃" if (0, j + 1) not in self.neighbors[(0, j)] else "    "
+            txt += "   ┃" if (0, j +
+                              1) not in self.neighbors[(0, j)] else "    "
         txt += "   ┃\n"
         # Lignes normales
         for i in range(self.height - 1):
             txt += "┣"
             for j in range(self.width - 1):
-                txt += "━━━╋" if (i + 1, j) not in self.neighbors[(i, j)] else "   ╋"
-            txt += "━━━┫\n" if (i + 1, self.width - 1) not in self.neighbors[(i, self.width - 1)] else "   ┫\n"
+                txt += "━━━╋" if (i + 1,
+                                  j) not in self.neighbors[(i, j)] else "   ╋"
+            txt += "━━━┫\n" if (i + 1, self.width -
+                                1) not in self.neighbors[(i, self.width - 1)] else "   ┫\n"
             txt += "┃"
             for j in range(self.width):
-                txt += "   ┃" if (i + 1, j + 1) not in self.neighbors[(i + 1, j)] else "    "
+                txt += "   ┃" if (i + 1, j +
+                                  1) not in self.neighbors[(i + 1, j)] else "    "
             txt += "\n"
         # Bas du tableau
         txt += "┗"
@@ -96,6 +101,51 @@ class Maze:
             txt += "━━━┻"
         txt += "━━━┛\n"
 
+        return txt
+
+    def overlay(self, content=None):
+        """
+        Rendu en mode texte, sur la sortie standard, \
+        d'un labyrinthe avec du contenu dans les cellules
+        Argument:
+            content (dict) : dictionnaire tq content[cell] contient le caractère à afficher au milieu de la cellule
+        Retour:
+            string
+        """
+        if content is None:
+            content = {(i,j):' ' for i in range(self.height) for j in range(self.width)}
+        else:
+        # Python >=3.9
+        #content = content | {(i, j): ' ' for i in range(
+        #    self.height) for j in range(self.width) if (i,j) not in content}
+        # Python <3.9
+            new_content = {(i, j): ' ' for i in range(self.height) for j in range(self.width) if (i,j) not in content}
+            content = {**content, **new_content}
+        txt = r""
+        # Première ligne
+        txt += "┏"
+        for j in range(self.width-1):
+            txt += "━━━┳"
+        txt += "━━━┓\n"
+        txt += "┃"
+        for j in range(self.width-1):
+            txt += " "+content[(0,j)]+" ┃" if (0,j+1) not in self.neighbors[(0,j)] else " "+content[(0,j)]+"  "
+        txt += " "+content[(0,self.width-1)]+" ┃\n"
+        # Lignes normales
+        for i in range(self.height-1):
+            txt += "┣"
+            for j in range(self.width-1):
+                txt += "━━━╋" if (i+1,j) not in self.neighbors[(i,j)] else "   ╋"
+            txt += "━━━┫\n" if (i+1,self.width-1) not in self.neighbors[(i,self.width-1)] else "   ┫\n"
+            txt += "┃"
+            for j in range(self.width):
+                txt += " "+content[(i+1,j)]+" ┃" if (i+1,j+1) not in self.neighbors[(i+1,j)] else " "+content[(i+1,j)]+"  "
+            txt += "\n"
+        # Bas du tableau
+        txt += "┗"
+        for i in range(self.width-1):
+            txt += "━━━┻"
+        txt += "━━━┛\n"
         return txt
 
     def gen_sidewinder(h, w):
@@ -141,7 +191,7 @@ class Maze:
         while len(pile) > 0:
             cell = pile[len(pile) - 1]
             del pile[len(pile) - 1]
-            #voisin = # get_contiguous_cells(cell)
+            voisin = get_contiguous_cells(cell)
             nonVisite = False
             for i in range(len(voisin)):
                 (x, y) = voisin[i]
@@ -164,6 +214,7 @@ class Maze:
 ####################################################
 
 
+        
     def add_wall(self, c1, c2):
         # Facultatif : on teste si les sommets sont bien dans le labyrinthe
         assert 0 <= c1[0] < self.height and \
@@ -194,17 +245,18 @@ class Maze:
         l=[]
         for i in range(self.height):
             for j in range(self.width):
-                if (i + 1) < self.height and 0<=j<self.width and (i + 1, j) not in self.neighbors[(i, j)] and (i, j) not in self.neighbors[(i + 1, j)] :
+                if (i + 1) < self.height and 0<=j<self.width and (i + 1, j) not in self.neighbors[(i, j)] and (i, j) not in self.neighbors[(i + 1, j)] and [(i+1,j),(i,j)] not in l :
                     l.append([(i,j),(i+1,j)])
                 else:
-                    if (j + 1) < self.width and 0<=i<self.height and (i, j + 1) not in self.neighbors[(i, j)] and (i, j) not in self.neighbors[(i, j + 1)] :
+                    if (j + 1) < self.width and 0<=i<self.height and (i, j + 1) not in self.neighbors[(i, j)] and (i, j) not in self.neighbors[(i, j + 1)] and [(i,j+1),(i,j)] not in l :
                         l.append([(i, j), (i, j+1)])
                     else:
-                        if (i - 1) >= 0 and 0<=j<self.width and (i - 1, j) not in self.neighbors[(i, j)] and (i, j) not in self.neighbors[(i - 1, j)] :
+                        if (i - 1) >= 0 and 0<=j<self.width and (i - 1, j) not in self.neighbors[(i, j)] and (i, j) not in self.neighbors[(i - 1, j)] and [(i-1,j),(i,j)] not in l :
                                 l.append([(i,j),(i-1,j)])
                         else :
-                                if (j - 1) >= 0 and 0<=i<self.height and (i, j - 1) not in self.neighbors[(i, j)] and (i, j)not in self.neighbors[(i, j - 1)] :
+                                if (j - 1) >= 0 and 0<=i<self.height and (i, j - 1) not in self.neighbors[(i, j)] and (i, j)not in self.neighbors[(i, j - 1)] and [(i,j-1),(i,j)] not in l :
                                     l.append([(i, j), (i, j-1)])
+
         return l
 
 
@@ -261,15 +313,207 @@ class Maze:
 
             
     def get_reachable_cells(self,c):
-         l=self.get_contiguous_cells(c)
-         for i in l:
-             if i not in self.neighbors[i]:
-                 l.remove(i)
-         return l
-  
-             
-laby = Maze(4, 4,False)
-print(laby.info())    
+        l=self.get_contiguous_cells(c)
+        for i in l:
+            if i not in self.neighbors[c]:
+                l.remove(i)
+        return l
+    
+    def gen_sidewinder(h, w):
+        lab = Maze(h, w, empty = False)
+        for i in range(h-1):
+            lst = []
+            for j in range(w-1):
+                lst.append((i,j))
+                valAl = randint(0,1)
+                derCell = (i,j)
+                #Si valAl = 0 on retire le mur EST
+                if valAl == 0:
+                    lab.neighbors[(i, j)].add((i, j+1))
+                    lab.neighbors[(i, j+1)].add((i, j))
+                #Sinon on retire le mur SUD
+                else:
+                    (x,y) = lst[randint(0,len(lst)-1)]
+                    lab.neighbors[(x, y)].add((x+1, y))
+                    lab.neighbors[(x+1, y)].add((x, y))
+                    lst = []
+            lst.append(derCell)
+            (x,y) = lst[randint(0,len(lst)-1)]
+            lab.neighbors[(x, y)].add((x+1, y))
+            lab.neighbors[(x+1, y)].add((x, y))
+        for k in range(w-1):
+            lab.neighbors[(h-1, k)].add((h-1, k+1))
+            lab.neighbors[(h-1, k+1)].add((h-1, k))
+        return lab
+    
+    def gen_exploration(h,w):
+        lab = Maze(h, w, empty = False)
+        lstVisitee = []
+        pile = []
+        XcellRand = randint(0,h-1)
+        YcellRand = randint(0,w-1)
+        lstVisitee.append((XcellRand, YcellRand))
+        pile.append((XcellRand, YcellRand))
+        while pile:
+            cell = pile.pop()
+            voisins = lab.get_contiguous_cells(cell)
+            #recherche de voisin  non visité
+            toutVisitee = True
+            idx = 0
+            while toutVisitee and idx < len(voisins):
+                if voisins[idx] not in lstVisitee:
+                    toutVisitee = False
+                idx += 1
+            if not toutVisitee:
+                pile.append(cell)
+                #suppresion des voisins visitée
+                idx = 0
+                while idx < len(voisins):
+                    if voisins[idx] in lstVisitee:
+                        del voisins[idx]
+                        idx -= 1
+                    idx += 1
+                cellSuiv = voisins[randint(0,len(voisins)-1)]
+                lab.remove_wall(cell, cellSuiv)
+                lstVisitee.append(cellSuiv)
+                pile.append(cellSuiv)
+        return lab
+    
+    def gen_wilson(h,w):
+        lab = Maze(h, w, empty = False)
+        #Récupération de toute les coordonnées
+        lstNonMarquee = []
+        for i in range(h):
+            for j in range(w):
+                lstNonMarquee.append((i,j))
+        #choix d'une cellule aléatoire non marqué
+        cellAl = lstNonMarquee[randint(0,len(lstNonMarquee)-1)]
+        lstNonMarquee.remove(cellAl)
+        voisins = lab.get_contiguous_cells(cellAl)
+        cellRaccord = voisins[randint(0,len(voisins)-1)]
+        lab.remove_wall(cellAl, cellRaccord)
+        
+        while len(lstNonMarquee) > 0:
+            #initialisation de la première cellule aléatoire
+            cellDep = lstNonMarquee[randint(0,len(lstNonMarquee)-1)]
+            voisins = lab.get_contiguous_cells(cellDep)
+            cellSuiv = voisins[randint(0,len(voisins)-1)]
+            cellPrec = cellDep
+            #début de la marche
+            continu = True
+            chemin = [cellDep]
+            while cellSuiv in lstNonMarquee:
+                #suppression du chemin formant la boucle
+                if cellSuiv in chemin:
+                    pos = chemin.index(cellSuiv)
+                    while len(chemin)-1 > pos:
+                        del chemin[len(chemin)-1]
+                else:
+                    chemin.append(cellSuiv)
+                #recherche de voisins
+                voisins = lab.get_contiguous_cells(cellSuiv)
+                voisins.remove(cellPrec)
+                cellPrec = cellSuiv
+                cellSuiv = voisins[randint(0,len(voisins)-1)]
+            #Si chemin long
+            if len(chemin) > 1:
+                for i in range(len(chemin)-1):
+                    lab.remove_wall(chemin[i], chemin[i+1])
+                    lstNonMarquee.remove(chemin[i])
+                lab.remove_wall(chemin[len(chemin)-1], cellSuiv)
+            #si chemin comportant une seule cellule
+            else :
+                lab.remove_wall(cellDep, cellSuiv)
+                
+            lstNonMarquee.remove(chemin[len(chemin)-1])
+            
+        return lab
+    
+    def solve_dfs(self, start, stop):
+        #initialisation
+        pile = [start]
+        lstMarquee = [start]
+        pred = {start : ''}
+        continu = True
+        cellAMarquee = []
+        while len(lstMarquee) < (self.width * self.height) and continu and len(pile) > 0:
+            c = pile.pop(0)
+            if c == stop:
+                continu = False
+            else : 
+                voisins = self.get_reachable_cells(c)
+                for i in range(len(voisins)):
+                    if voisins[i] not in lstMarquee:
+                        lstMarquee.append(voisins[i])
+                        pile = [voisins[i]] + pile 
+                        pred[voisins[i]] = ''
+        #initialisation reconstruction du chemin
+        c = stop
+        chemin = []
+        lst = []
+        for elmt in pred.keys():
+            lst.append(elmt)
+        idx = len(pred)-1
+        while c != start:
+            chemin.append(c)
+            c = lst[idx]
+            idx -= 1
+        chemin.append(start)
+        return chemin
+
+
+
+    def gen_btree(h, w):
+        laby = Maze(h, w, False)
+
+        for i in range(laby.height):
+            for j in range(laby.width):
+
+                aleatoire = randint(0, 1)
+                if aleatoire and j+1 < laby.width:
+                    laby.remove_wall((i, j), (i, j+1))
+                if not aleatoire and i+1 < laby.height:
+                    laby.remove_wall((i, j), (i+1, j))
+
+        return laby
+
+
+
+    def gen_fusion(h, w):
+        laby = Maze(h, w, False)
+        compt = 0
+        compt2=0
+        marquage = {}
+        murs = laby.get_walls()
+        shuffle(murs)
+
+        
+        for i in range(h):
+            for j in range(w):
+                marquage[(i, j)] = compt
+                compt += 1
+                
+        for k in range(len(murs)):
+        
+            if marquage[murs[k][0]] != marquage[murs[k][1]] and compt2 <((h*w)-1):
+                compt2+=1
+                temp=marquage[murs[k][0]] 
+                laby.remove_wall(murs[k][1], murs[k][0])
+                print(laby)
+                
+                for i in marquage:
+                    
+                   if marquage[i]==temp:
+                       marquage[i] = marquage[murs[k][1]]
+                print(marquage)
+                
+                
+        return laby
+    
+
+
+laby = Maze(4, 4, False)
+print(laby.info())
 
 
 print(laby)
@@ -294,8 +538,8 @@ laby.neighbors = {
 }
 print(laby)
 
-laby.neighbors[(1,3)].remove((2,3))
-laby.neighbors[(2,3)].remove((1,3))
+laby.neighbors[(1, 3)].remove((2, 3))
+laby.neighbors[(2, 3)].remove((1, 3))
 print(laby)
 
 laby.neighbors[(1, 3)].add((2, 3))
@@ -303,8 +547,7 @@ laby.neighbors[(2, 3)].add((1, 3))
 print(laby)
 
 
-
-laby = Maze(5, 5, empty = True)
+laby = Maze(5, 5, empty=True)
 laby.fill()
 print(laby)
 
@@ -319,7 +562,14 @@ print(laby)
 
 print(laby.get_walls())
 
-print(laby.get_contiguous_cells((0,1))," contigue")
+print(laby.get_contiguous_cells((0, 1)), " contigue")
 
-print(laby.get_reachable_cells((0,1)))
+print(laby.get_reachable_cells((0, 1)))
+
+laby = Maze.gen_btree(4, 4)
+print(laby)
+
+laby = Maze.gen_fusion(4, 4)
+print(laby)
+
 
