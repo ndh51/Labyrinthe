@@ -409,8 +409,8 @@ class Maze:
         Returns
         -------
         Maze
-            labyrinthe de la classe maze avec.
-
+            Génère un labyrinthe choisissant aléatoirement entre casser
+            le mur EST ou le mur SUD
         """
         
         lab = Maze(h, w, empty = False)
@@ -502,7 +502,8 @@ class Maze:
         Returns
         -------
         Maze
-            labyrinthe de la classe maze avec.
+            Génère un labyrinthe cassant les murs à mesure qu'on avance et
+            à la manière d'un parcours en profondeur.
 
         """
         
@@ -555,8 +556,8 @@ class Maze:
         Returns
         -------
         Maze
-            labyrinthe de la classe maze avec.
-
+            Génère un labyrinthe comme si un serpent avait creusé dans le labyrinthe
+            à partir d'un point de dépar aléatoire et jusqu'à un endroit déjà creusé.
         """
         
         lab = Maze(h, w, empty = False)
@@ -633,7 +634,8 @@ class Maze:
         Returns
         -------
         list
-            DESCRIPTION.
+            Recherche le chemin le plus rapide pour atteindre 'stop' en partant
+            de 'start' avec un parcours en profondeur.
 
         """
         
@@ -672,6 +674,23 @@ class Maze:
     
     
     def solve_bfs(self, start, stop):
+        """
+        
+
+        Parameters
+        ----------
+        start : tuple
+            coordonnée de depart.
+        stop : tuple
+            coordonnée d'arrivée.
+
+        Returns
+        -------
+        list
+            Recherche le chemin le plus rapide pour atteindre 'stop' en partant
+            de 'start' avec un parcours en largeur.
+
+        """
        #initialisation
        file = [start]
        lstMarquee = []
@@ -689,8 +708,6 @@ class Maze:
                        lstMarquee.append(voisins[i])
                        file.append(voisins[i])
                        pred[voisins[i]] = c
-
-       ###get_reachable_cell = 1 cell -> cul de sac
        #initialisation reconstruction du chemin
        c = stop
        chemin = []
@@ -719,8 +736,8 @@ class Maze:
         Returns
         -------
         list
-            DESCRIPTION.
-
+            Recherche le chemin le plus rapide pour atteindre le départ en partant
+            de l'arrivée dans un labyrinthe sans murs.
         """
         
         l=[]
