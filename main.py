@@ -1,6 +1,8 @@
 from random import *
 
 
+### Burlot Brice, Hales Nadhir
+
 class Maze:
     """
     Classe Labyrinthe
@@ -158,7 +160,23 @@ class Maze:
 
 
         
-    def add_wall(self, c1, c2):
+    def add_wall(self, c1 :tuple , c2 : tuple)-> None:
+        """
+        methode
+
+        Parameters
+        ----------
+        c1 : tuple
+            1ere coordonnée visée par l'ajout de mur.
+        c2 : TYPE
+            2e coordonnée visée.
+
+        Uses
+        -------
+        ajout de mur entres deux cellules.
+
+        """
+        
         # Facultatif : on teste si les sommets sont bien dans le labyrinthe
         assert 0 <= c1[0] < self.height and \
                0 <= c1[1] < self.width and \
@@ -172,7 +190,22 @@ class Maze:
             self.neighbors[c2].remove(c1)  # on le retire
 
 
-    def remove_wall(self,c1,c2):
+    def remove_wall(self,c1 : tuple ,c2 : tuple)-> None:
+        """
+        methode 
+        
+        Parameters
+        ----------
+        c1 : tuple
+            1ere coordonnée visée par la suppression de mur.
+        c2 : TYPE
+            2e coordonnée visée.
+
+        Returns
+        -------
+        Supprime un mur entres deux cellules.
+
+        """
         # Facultatif : on teste si les sommets sont bien dans le labyrinthe
         assert 0 <= c1[0] < self.height and \
                0 <= c1[1] < self.width and \
@@ -185,7 +218,17 @@ class Maze:
             self.neighbors[c1].add(c2)
             
 
-    def get_walls(self):
+    def get_walls(self)-> list:
+        """
+        methode
+
+        Returns
+        -------
+        l : list
+        
+            liste contenant l'ensemble des murs dans le labyrinthe visé par le self.
+
+        """
         l=[]
         for i in range(self.height):
             for j in range(self.width):
@@ -206,6 +249,14 @@ class Maze:
 
 
     def fill(self):
+        """
+        methode
+
+        Uses
+        -------
+        remplit le labyrinthe visé par le self de murs.
+
+        """
         for i in range(self.height):
             for j in range(self.width):
                     if (i + 1) < self.height and 0<=j<self.width and (i + 1, j)  in self.neighbors[(i, j)] and (i, j)  in self.neighbors[(i + 1, j)] :
@@ -223,26 +274,49 @@ class Maze:
                         
         
     def empty(self):
-            for i in range(self.height):
-                for j in range(self.width):
-                        if (i + 1) < self.height and 0<=j<self.width and (i + 1, j) not in self.neighbors[(i, j)] and (i, j) not in self.neighbors[(i + 1, j)] :
-                            self.neighbors[(i,j)].add((i+1,j))
-                            self.neighbors[(i+1, j)].add((i, j))
-                            
-                        if (j + 1) < self.width and 0<=i<self.height and (i, j + 1) not in self.neighbors[(i, j)] and (i, j) not in self.neighbors[(i, j + 1)] :
-                            self.neighbors[(i, j+1)].add((i, j))
-                            self.neighbors[(i, j)].add((i, j+1))
-                            
-                        if (i - 1) >= 0 and 0<=j<self.width and (i - 1, j) not in self.neighbors[(i, j)] and (i, j) not in self.neighbors[(i - 1, j)] :
-                            self.neighbors[(i, j)].add((i - 1, j))
-                            self.neighbors[(i - 1, j)].add((i, j))
-                            
-                        if (j - 1) >= 0 and 0<=i<self.height and (i, j - 1) not in self.neighbors[(i, j)] and (i, j)not in self.neighbors[(i, j - 1)] :
-                            self.neighbors[(i, j - 1)].add((i, j))
-                            self.neighbors[(i, j)].add((i, j - 1))
+        """
+        methode
+
+        Uses
+        -------
+        Vide le labyrinthe de ses murs
+
+        """
+        for i in range(self.height):
+            for j in range(self.width):
+                    if (i + 1) < self.height and 0<=j<self.width and (i + 1, j) not in self.neighbors[(i, j)] and (i, j) not in self.neighbors[(i + 1, j)] :
+                        self.neighbors[(i,j)].add((i+1,j))
+                        self.neighbors[(i+1, j)].add((i, j))
+                        
+                    if (j + 1) < self.width and 0<=i<self.height and (i, j + 1) not in self.neighbors[(i, j)] and (i, j) not in self.neighbors[(i, j + 1)] :
+                        self.neighbors[(i, j+1)].add((i, j))
+                        self.neighbors[(i, j)].add((i, j+1))
+                        
+                    if (i - 1) >= 0 and 0<=j<self.width and (i - 1, j) not in self.neighbors[(i, j)] and (i, j) not in self.neighbors[(i - 1, j)] :
+                        self.neighbors[(i, j)].add((i - 1, j))
+                        self.neighbors[(i - 1, j)].add((i, j))
+                        
+                    if (j - 1) >= 0 and 0<=i<self.height and (i, j - 1) not in self.neighbors[(i, j)] and (i, j)not in self.neighbors[(i, j - 1)] :
+                        self.neighbors[(i, j - 1)].add((i, j))
+                        self.neighbors[(i, j)].add((i, j - 1))
 
     
     def get_contiguous_cells(self,c) : 
+        """
+        methode
+
+        Parameters
+        ----------
+        c : TYPE
+            une cellule du labyrinthe visé par le self.
+
+        Returns
+        -------
+        l : TYPE
+            la liste des cellules contigues.
+
+        """
+        
         assert 0 <= c[0] < self.height and \
                0 <= c[1] < self.width and \
                0 <= c[0] < self.height and \
@@ -257,6 +331,20 @@ class Maze:
 
             
     def get_reachable_cells(self,c):
+        """
+        methode
+
+        Parameters
+        ----------
+        c : TYPE
+            une cellule du labyrinthe visé par le self.
+
+        Returns
+        -------
+        l : TYPE
+            la liste des cellules contigues atteignables.
+
+        """
         l=self.get_contiguous_cells(c)
         for i in l:
             if i not in self.neighbors[c]:
@@ -273,7 +361,24 @@ class Maze:
 
 ###    5.1
 
-    def gen_btree(h, w):
+    def gen_btree(h : int , w : int):
+        """
+        
+
+        Parameters
+        ----------
+        h : int
+            hauteur du labyrinthe.
+        w : int
+            largeur du labyrinthe.
+
+        Returns
+        -------
+        Maze
+            labyrinthe de la classe maze avec génération aléatoire de chemins.
+
+        """
+        
         laby = Maze(h, w, False)
 
         for i in range(laby.height):
@@ -290,7 +395,24 @@ class Maze:
     
 ###    5.2 
     
-    def gen_sidewinder(h, w):
+    def gen_sidewinder(h : int, w : int):
+        """
+        
+
+        Parameters
+        ----------
+        h : int
+            hauteur du labyrinthe.
+        w : int
+            largeur du labyrinthe.
+
+        Returns
+        -------
+        Maze
+            labyrinthe de la classe maze avec.
+
+        """
+        
         lab = Maze(h, w, empty = False)
         for i in range(h-1):
             lst = []
@@ -319,7 +441,24 @@ class Maze:
     
 ###    5.3
     
-    def gen_fusion(h, w):
+    def gen_fusion(h : int , w : int):
+        """
+        
+
+        Parameters
+        ----------
+        h : int
+            hauteur du labyrinthe.
+        w : int
+            largeur du labyrinthe.
+
+        Returns
+        -------
+        Maze
+            Un object de la classe Maze avec un chemin aléatoire généré via la fusion.
+
+        """
+        
         laby = Maze(h, w, False)
         compt = 0
         compt2=0
@@ -349,7 +488,24 @@ class Maze:
 ###    5.4
     
     
-    def gen_exploration(h,w):
+    def gen_exploration(h : int ,w :int ):
+        """
+        
+
+        Parameters
+        ----------
+        h : int
+            hauteur du labyrinthe.
+        w : int
+            largeur du labyrinthe.
+
+        Returns
+        -------
+        Maze
+            labyrinthe de la classe maze avec.
+
+        """
+        
         lab = Maze(h, w, empty = False)
         lstVisitee = []
         pile = []
@@ -385,7 +541,24 @@ class Maze:
     
 ###    5.5
     
-    def gen_wilson(h,w):
+    def gen_wilson(h :int ,w: int ): 
+        """
+        
+
+        Parameters
+        ----------
+        h : int
+            hauteur du labyrinthe.
+        w : int
+            largeur du labyrinthe.
+
+        Returns
+        -------
+        Maze
+            labyrinthe de la classe maze avec.
+
+        """
+        
         lab = Maze(h, w, empty = False)
         #Récupération de toute les coordonnées
         lstNonMarquee = []
@@ -439,12 +612,31 @@ class Maze:
     
 ##############################################################################
 
+
 ##  PARTIE 6
+
 
 
 ###    6.1    
     
-    def solve_dfs(self, start, stop):
+    def solve_dfs(self, start :tuple , stop:tuple )-> list:
+        """
+        
+
+        Parameters
+        ----------
+        start : tuple
+            coordonnée de depart.
+        stop : tuple
+            coordonnée d'arrivée.
+
+        Returns
+        -------
+        list
+            DESCRIPTION.
+
+        """
+        
         #initialisation
         pile = [start]
         lstMarquee = [start]
@@ -476,18 +668,140 @@ class Maze:
         chemin.append(start)
         return chemin
     
+    
+    
+    
+    def solve_bfs(self, start, stop):
+       #initialisation
+       file = [start]
+       lstMarquee = []
+       pred = {start : start}
+       continu = True
+       cellAMarquee = []
+       while len(file) > 0:
+           c = file.pop(0)
+           if c == stop:
+               continu = False
+           else :
+               voisins = self.get_reachable_cells(c)
+               for i in range(len(voisins)):
+                   if voisins[i] not in lstMarquee and voisins[i] not in file:
+                       lstMarquee.append(voisins[i])
+                       file.append(voisins[i])
+                       pred[voisins[i]] = c
+
+       ###get_reachable_cell = 1 cell -> cul de sac
+       #initialisation reconstruction du chemin
+       c = stop
+       chemin = []
+       while c != start:
+           chemin.append(c)
+           c = pred[c]
+       chemin.append(start)
+       return chemin
+
+    
 
 
 ###    6.2
 
-    def solve_rhr(start, stop):
+    def solve_rhr(start:tuple , stop:tuple) ->list:
+        """
         
 
+        Parameters
+        ----------
+        start : tuple
+            coordonnée de depart.
+        stop : tuple
+            coordonnée d'arrivée.
+            
+        Returns
+        -------
+        list
+            DESCRIPTION.
+
+        """
+        
+        l=[]
+        
+        return l
 
 
 
 
 
+
+
+###############################################################################
+
+###    PARTIE 7
+
+    def distance_geo(self, c1: tuple , c2 : tuple )-> int:
+            """
+            
+
+            Parameters
+            ----------
+            c1 : tuple
+                cellule de depart.
+            c2 : tuple
+                cellule d'arrivée.
+
+            Returns
+            -------
+            int
+                nombre minimale de deplacement necessaire pour atteindre c2 depuis c1 en prenant en compte les murs.
+
+            """
+            
+            chemin = self.solve_dfs(c1, c2)
+            return len(chemin)-1
+
+
+
+
+
+
+    def distance_man(self, c1:tuple ,c2: tuple )->int :
+            """
+            
+
+            Parameters
+            ----------
+            c1 : tuple
+                cellule de depart.
+            c2 : tuple
+                cellule d'arrivée.
+
+            Returns
+            -------
+            int
+                taille du chemin le plus cours sans prendre compte des murs.
+
+            """
+            
+            return abs(c2[0]-c1[0])+abs(c2[1]-c1[1])
+            
+
+
+
+
+###############################################################################
+
+
+###            PARTIE 8
+
+
+
+###     8.1
+
+
+
+
+
+
+###     8.2
 
 
 
@@ -498,6 +812,27 @@ class Maze:
 
 """
 
+class color:
+   PURPLE = '\033[95m'
+   CYAN = '\033[96m'
+   DARKCYAN = '\033[36m'
+   BLUE = '\033[94m'
+   GREEN = '\033[92m'
+   YELLOW = '\033[93m'
+   RED = '\033[91m'
+   BOLD = '\033[1m'
+   UNDERLINE = '\033[4m'
+   END = '\033[0m'
+
+"""
+
+Permet l'affichage en couleurs
+
+"""
+
+## PARTIE 3
+
+print(color.RED + color.BOLD +'\n Tests Partie 3 \n\n'+ color.END)
 
 laby = Maze(4, 4, False)
 print(laby.info())
@@ -531,8 +866,13 @@ print(laby, 'test remove walls')
 
 laby.neighbors[(1, 3)].add((2, 3))
 laby.neighbors[(2, 3)].add((1, 3))
-print(laby,' test ajoux de voisins ')
+print(laby,' test ajoux de voisins \n\n')
 
+
+
+## PARTIE 4
+
+print(color.RED + color.BOLD + '\n Tests Partie 4 \n\n' + color.END)
 
 laby = Maze(5, 5, empty=True)
 laby.fill()
@@ -551,12 +891,71 @@ print(laby.get_walls(),'liste des murs')
 
 print(laby.get_contiguous_cells((0, 1)), " cellules contigues")
 
-print(laby.get_reachable_cells((0, 1)),'cellules atteignables')
+print(laby.get_reachable_cells((0, 1)),'cellules atteignables \n\n')
+
+
+
+
+## PARTIE 5
+
+print(color.RED + color.BOLD +'\n Tests Partie 5 \n\n'+ color.END)
 
 laby = Maze.gen_btree(4, 4)
 print(laby, 'arbre binaire')
 
+laby = Maze.gen_sidewinder(4, 4)
+print(laby, 'Sidewinder')
+
 laby = Maze.gen_fusion(4, 4)
 print(laby, 'fusion')
+
+laby = Maze.gen_exploration(15,15)
+print(laby, 'exploration exhaustive')
+
+laby = Maze.gen_wilson(12, 12)
+print(laby,'Wilson \n\n')
+
+
+
+
+## PARTIE 6
+
+print(color.RED + color.BOLD + '\n Tests Partie 6 \n\n' + color.END )
+
+laby = Maze.gen_fusion(15, 15)
+solution = laby.solve_dfs((0, 0), (14, 14))
+str_solution = {c:'*' for c in solution}
+str_solution[( 0,  0)] = 'D'
+str_solution[(14, 14)] = 'A'
+print(laby.overlay(str_solution), "parcours en profondeur")
+
+
+laby = Maze.gen_exploration(15, 15)
+solution = laby.solve_dfs((0, 0), (14, 14))
+str_solution = {c:'*' for c in solution}
+str_solution[( 0,  0)] = 'D'
+str_solution[(14, 14)] = 'A'
+print(laby.overlay(str_solution),"parcours en largeur \n\n")
+
+
+
+
+## partie 7
+
+print(color.RED + color.BOLD + '\n Tests Partie 7 \n\n' + color.END)
+
+
+laby = Maze.gen_exploration(15, 15)
+print(laby.distance_geo((0, 0), (14, 14)),'distance géographique')
+
+
+print(laby.distance_man((0,0),(14,14)),'Manhattan \n\n')
+
+
+## partie 8 
+
+
+
+
 
 
