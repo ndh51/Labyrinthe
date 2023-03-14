@@ -691,13 +691,13 @@ class Maze:
             de 'start' avec un parcours en largeur.
 
         """
-       #initialisation
-       file = [start]
-       lstMarquee = []
-       pred = {start : start}
-       continu = True
-       cellAMarquee = []
-       while len(file) > 0:
+        #initialisation
+        file = [start]
+        lstMarquee = []
+        pred = {start : start}
+        continu = True
+        cellAMarquee = []
+        while len(file) > 0:
            c = file.pop(0)
            if c == stop:
                continu = False
@@ -708,14 +708,14 @@ class Maze:
                        lstMarquee.append(voisins[i])
                        file.append(voisins[i])
                        pred[voisins[i]] = c
-       #initialisation reconstruction du chemin
-       c = stop
-       chemin = []
-       while c != start:
+        #initialisation reconstruction du chemin
+        c = stop
+        chemin = []
+        while c != start:
            chemin.append(c)
            c = pred[c]
-       chemin.append(start)
-       return chemin
+        chemin.append(start)
+        return chemin
 
     
 
