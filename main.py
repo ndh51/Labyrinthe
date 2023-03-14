@@ -328,6 +328,7 @@ class Maze:
                 if self.height>i>=0 and self.width>j>=0 and ((i,j)!=(c[0]-1,c[1]-1) and (i,j)!=(c[0]-1,c[1]+1) and (i,j)!=(c[0]+1,c[1]-1) and (i,j)!=(c[0]+1,c[1]+1)) and (i,j)!=(c[0],c[1]):
                     l.append((i,j))        
         return l
+    
 
             
     def get_reachable_cells(self,c):
@@ -345,10 +346,19 @@ class Maze:
             la liste des cellules contigues atteignables.
 
         """
+        assert type(c)==tuple and \
+            type(c[0])==type(c[1])==int ,\
+                f"erreur dans le type la cellule : {c[1]} ou {c[0]} n'est pas un entier ou {c} n'est pas un un tuple "
         l=self.get_contiguous_cells(c)
-        for i in l:
-            if i not in self.neighbors[c]:
-                l.remove(i)
+        idx = 0
+        while idx < len(l):
+            voisin = l[idx]
+            if voisin not in self.neighbors[c]:
+                l.remove(voisin)
+                idx -= 1
+            idx += 1
+
+
         return l
     
     
@@ -378,6 +388,8 @@ class Maze:
             labyrinthe de la classe maze avec génération aléatoire de chemins.
 
         """
+        assert type(h)==type(w)==int , \
+            f"erreur de type de donnée : {h} ou {w} n'est pas un entier"        
         
         laby = Maze(h, w, False)
 
@@ -412,7 +424,9 @@ class Maze:
             labyrinthe de la classe maze avec.
 
         """
-        
+        assert type(h)==type(w)==int , \
+            f"erreur de type de donnée : {h} ou {w} n'est pas un entier"
+            
         lab = Maze(h, w, empty = False)
         for i in range(h-1):
             lst = []
@@ -458,6 +472,8 @@ class Maze:
             Un object de la classe Maze avec un chemin aléatoire généré via la fusion.
 
         """
+        assert type(h)==type(w)==int , \
+            f"erreur de type de donnée : {h} ou {w} n'est pas un entier"
         
         laby = Maze(h, w, False)
         compt = 0
@@ -505,7 +521,9 @@ class Maze:
             labyrinthe de la classe maze avec.
 
         """
-        
+        assert type(h)==type(w)==int , \
+            f"erreur de type de donnée : {h} ou {w} n'est pas un entier"
+            
         lab = Maze(h, w, empty = False)
         lstVisitee = []
         pile = []
@@ -558,6 +576,8 @@ class Maze:
             labyrinthe de la classe maze avec.
 
         """
+        assert type(h)==type(w)==int , \
+            f"erreur de type de donnée : {h} ou {w} n'est pas un entier"
         
         lab = Maze(h, w, empty = False)
         #Récupération de toute les coordonnées
@@ -633,52 +653,71 @@ class Maze:
         Returns
         -------
         list
-            DESCRIPTION.
+            Recherche le chemin le plus rapide pour atteindre 'stop' en partant
+            de 'start' avec un parcours en profondeur.
 
         """
-        
+        assert type(start[0]) == type(start[1]) == type(stop[0])  == type(stop[1])  ==int  and \
+                type(start )== type(stop)==tuple , \
+            f"Erreur lors de la verification des types des attributs  : type de donnée non adéquat"
+            
         #initialisation
         pile = [start]
-        lstMarquee = [start]
-        pred = {start : ''}
+        lstMarquee = []
+        pred = {start : start}
         continu = True
         cellAMarquee = []
-        while len(lstMarquee) < (self.width * self.height) and continu and len(pile) > 0:
+        while len(pile) > 0:
             c = pile.pop(0)
             if c == stop:
                 continu = False
-            else : 
+            else :
                 voisins = self.get_reachable_cells(c)
                 for i in range(len(voisins)):
-                    if voisins[i] not in lstMarquee:
+                    if voisins[i] not in lstMarquee and voisins[i] not in pile:
                         lstMarquee.append(voisins[i])
-                        pile = [voisins[i]] + pile 
-                        pred[voisins[i]] = ''
-        #initialisation reconstruction du chemin
+                        pile = [voisins[i]] + pile
+                        pred[voisins[i]] = c
         c = stop
         chemin = []
-        lst = []
-        for elmt in pred.keys():
-            lst.append(elmt)
-        idx = len(pred)-1
         while c != start:
             chemin.append(c)
-            c = lst[idx]
-            idx -= 1
+            c = pred[c]
         chemin.append(start)
         return chemin
+
     
     
     
     
     def solve_bfs(self, start, stop):
-       #initialisation
-       file = [start]
-       lstMarquee = []
-       pred = {start : start}
-       continu = True
-       cellAMarquee = []
-       while len(file) > 0:
+        """
+
+        Parameters
+        ----------
+        start : tuple
+            coordonnée de depart.
+        stop : tuple
+            coordonnée d'arrivée.
+
+        Returns
+        -------
+        list
+            Recherche le chemin le plus rapide pour atteindre 'stop' en partant
+            de 'start' avec un parcours en largeur.
+
+        """
+        assert type(start[0]) == type(start[1]) == type(stop[0])  == type(stop[1])  ==int  and \
+                type(start )== type(stop)==tuple , \
+            f"Erreur lors de la verification des types des attributs  : type de donnée non adéquat"
+            
+        #initialisation
+        file = [start]
+        lstMarquee = []
+        pred = {start : start}
+        continu = True
+        cellAMarquee = []
+        while len(file) > 0:
            c = file.pop(0)
            if c == stop:
                continu = False
@@ -689,16 +728,14 @@ class Maze:
                        lstMarquee.append(voisins[i])
                        file.append(voisins[i])
                        pred[voisins[i]] = c
-
-       ###get_reachable_cell = 1 cell -> cul de sac
-       #initialisation reconstruction du chemin
-       c = stop
-       chemin = []
-       while c != start:
-           chemin.append(c)
-           c = pred[c]
-       chemin.append(start)
-       return chemin
+                       
+        c = stop
+        chemin = []
+        while c != start:
+            chemin.append(c)
+            c = pred[c]
+        chemin.append(start)
+        return chemin
 
     
 
@@ -722,6 +759,9 @@ class Maze:
             DESCRIPTION.
 
         """
+        assert type(start[0]) == type(start[1]) == type(stop[0])  == type(stop[1])  ==int  and \
+                type(start )== type(stop)==tuple , \
+            f"Erreur lors de la verification des types des attributs  : type de donnée non adéquat"
         
         l=[]
         
@@ -755,6 +795,10 @@ class Maze:
 
             """
             
+            assert type(c1[0]) == type(c1[1]) == type(c2[0])  == type(c2[1])  ==int  and \
+                    type(c1 )== type(c2)==tuple , \
+                f"Erreur lors de la verification des types des attributs  : type de donnée non adéquat"
+            
             chemin = self.solve_dfs(c1, c2)
             return len(chemin)-1
 
@@ -780,6 +824,9 @@ class Maze:
                 taille du chemin le plus cours sans prendre compte des murs.
 
             """
+            assert type(c1[0]) == type(c1[1]) == type(c2[0])  == type(c2[1])  ==int  and \
+                    type(c1 )== type(c2)==tuple , \
+                f"Erreur lors de la verification des types des attributs  : type de donnée non adéquat"
             
             return abs(c2[0]-c1[0])+abs(c2[1]-c1[1])
             
@@ -922,16 +969,16 @@ print(laby,'Wilson \n\n')
 
 print(color.RED + color.BOLD + '\n Tests Partie 6 \n\n' + color.END )
 
-laby = Maze.gen_fusion(15, 15)
+laby = Maze.gen_exploration(15, 15)
 solution = laby.solve_dfs((0, 0), (14, 14))
 str_solution = {c:'*' for c in solution}
 str_solution[( 0,  0)] = 'D'
 str_solution[(14, 14)] = 'A'
+
 print(laby.overlay(str_solution), "parcours en profondeur")
 
 
-laby = Maze.gen_exploration(15, 15)
-solution = laby.solve_dfs((0, 0), (14, 14))
+solution = laby.solve_bfs((0, 0), (14, 14))
 str_solution = {c:'*' for c in solution}
 str_solution[( 0,  0)] = 'D'
 str_solution[(14, 14)] = 'A'
