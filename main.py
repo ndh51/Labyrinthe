@@ -421,8 +421,8 @@ class Maze:
         Returns
         -------
         Maze
-            labyrinthe de la classe maze avec.
-
+            Génère un labyrinthe choisissant aléatoirement entre casser
+            le mur EST ou le mur SUD
         """
         assert type(h)==type(w)==int , \
             f"erreur de type de donnée : {h} ou {w} n'est pas un entier"
@@ -518,7 +518,8 @@ class Maze:
         Returns
         -------
         Maze
-            labyrinthe de la classe maze avec.
+            Génère un labyrinthe cassant les murs à mesure qu'on avance et
+            à la manière d'un parcours en profondeur.
 
         """
         assert type(h)==type(w)==int , \
@@ -573,8 +574,8 @@ class Maze:
         Returns
         -------
         Maze
-            labyrinthe de la classe maze avec.
-
+            Génère un labyrinthe comme si un serpent avait creusé dans le labyrinthe
+            à partir d'un point de dépar aléatoire et jusqu'à un endroit déjà creusé.
         """
         assert type(h)==type(w)==int , \
             f"erreur de type de donnée : {h} ou {w} n'est pas un entier"
@@ -756,8 +757,8 @@ class Maze:
         Returns
         -------
         list
-            DESCRIPTION.
-
+            Recherche le chemin le plus rapide pour atteindre le départ en partant
+            de l'arrivée dans un labyrinthe sans murs.
         """
         assert type(start[0]) == type(start[1]) == type(stop[0])  == type(stop[1])  ==int  and \
                 type(start )== type(stop)==tuple , \
