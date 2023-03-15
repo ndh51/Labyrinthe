@@ -805,7 +805,7 @@ class Maze:
                 f"Erreur lors de la verification des types des attributs  : type de donnée non adéquat"
             
             chemin = self.solve_dfs(c1, c2)
-            return len(chemin)-1
+            return len(chemin)-2
 
 
 
