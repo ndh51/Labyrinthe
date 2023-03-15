@@ -433,7 +433,6 @@ class Maze:
             for j in range(w-1):
                 lst.append((i,j))
                 valAl = randint(0,1)
-                derCell = (i,j)
                 #Si valAl = 0 on retire le mur EST
                 if valAl == 0:
                     lab.neighbors[(i, j)].add((i, j+1))
@@ -444,7 +443,7 @@ class Maze:
                     lab.neighbors[(x, y)].add((x+1, y))
                     lab.neighbors[(x+1, y)].add((x, y))
                     lst = []
-            lst.append(derCell)
+            lst.append((i, lab.width-1))
             (x,y) = lst[randint(0,len(lst)-1)]
             lab.neighbors[(x, y)].add((x+1, y))
             lab.neighbors[(x+1, y)].add((x, y))
