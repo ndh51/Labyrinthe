@@ -1,4 +1,5 @@
-from random import *
+from random import randint,shuffle
+import operator as op
 
 
 ### Burlot Brice, Hales Nadhir
@@ -659,7 +660,7 @@ class Maze:
         """
         assert type(start[0]) == type(start[1]) == type(stop[0])  == type(stop[1])  ==int  and \
                 type(start )== type(stop)==tuple , \
-            f"Erreur lors de la verification des types des attributs  : type de donnée non adéquat"
+                    f"Erreur lors de la verification des types des attributs  : type de donnée non adéquat"
             
         #initialisation
         pile = [start]
@@ -742,7 +743,7 @@ class Maze:
 
 ###    6.2
 
-    def solve_rhr(start:tuple , stop:tuple) ->list:
+    def solve_rhr(self, start:tuple , stop:tuple) ->list:
         """
         
 
@@ -756,16 +757,67 @@ class Maze:
         Returns
         -------
         list
-            DESCRIPTION.
+            une liste contenant le chemin de star à stop en suivant toujours le mur de droite.
 
         """
         assert type(start[0]) == type(start[1]) == type(stop[0])  == type(stop[1])  ==int  and \
                 type(start )== type(stop)==tuple , \
             f"Erreur lors de la verification des types des attributs  : type de donnée non adéquat"
         
-        l=[]
-        
-        return l
+        chemin=[start]
+        cell=start
+        marquage=[]
+        print(cell)
+        while cell != stop and len(chemin)< (self.width*self.height):
+            
+            atteignables= self.get_reachable_cells(cell)
+            print(atteignables)
+            
+            if (cell[0]+1,cell[1]) in atteignables and (cell[0]+1,cell[1]) != chemin[-1] and marquage.count(cell)<2  :
+                
+                chemin.append((cell[0]+1,cell[1]))
+                
+                cell =chemin[-1]
+                print(cell)
+                
+                marquage.append((cell[0]+1,cell[1]))
+                
+            else :
+                
+                if (cell[0],cell[1]-1) in atteignables and (cell[0],cell[1]-1) != chemin[-1] and marquage.count(cell)<2:
+                    
+                    chemin.append((cell[0],cell[1]-1))
+                    cell =chemin[-1]
+                    print(cell)
+                    
+                    marquage.append((cell[0],cell[1]-1))
+                    
+                else : 
+                    
+                    if (cell[0],cell[1]+1) in atteignables and (cell[0],cell[1]+1) != chemin[-1] and marquage.count(cell)<2 : 
+                        
+                        
+                        chemin.append((cell[0],cell[1]+1))
+                        cell =chemin[-1]
+                        print(cell)
+                        
+                        marquage.append((cell[0],cell[1]+1))
+                        
+                    else :
+                        
+                        if (cell[0]-1,cell[1]) in atteignables and (cell[0]-1,cell[1]) != chemin[-1] and marquage.count(cell)<2:
+                            
+                            chemin.append((cell[0]-1,cell[1]))
+                            cell =chemin[-1]
+                            print(cell)
+                            
+                            marquage.append((cell[0]-1,cell[1]))
+                            
+                            
+        print(len(chemin),chemin)
+        return chemin
+    
+    
 
 
 
@@ -983,6 +1035,14 @@ str_solution = {c:'*' for c in solution}
 str_solution[( 0,  0)] = 'D'
 str_solution[(14, 14)] = 'A'
 print(laby.overlay(str_solution),"parcours en largeur \n\n")
+
+
+laby = Maze.gen_exploration(4, 4)
+solution = laby.solve_rhr((0, 0),(3, 3))
+str_solution = {c:'*' for c in solution}
+str_solution[( 0,  0)] = 'D'
+str_solution[(3, 3)] = 'A'
+print(laby.overlay(str_solution), 'main droite')
 
 
 
