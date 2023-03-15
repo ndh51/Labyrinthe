@@ -741,7 +741,7 @@ class Maze:
 
 ###    6.2
 
-    def solve_rhr(start:tuple , stop:tuple) ->list:
+    def solve_rhr(self, start: tuple, stop: tuple) -> list:
         """
         
 
@@ -761,14 +761,6 @@ class Maze:
         assert type(start[0]) == type(start[1]) == type(stop[0])  == type(stop[1])  ==int  and \
                 type(start )== type(stop)==tuple , \
             f"Erreur lors de la verification des types des attributs  : type de donnée non adéquat"
-        
-        l=[]
-        
-        return l
-
-
-
-    def solve_rhr(self, start: tuple, stop: tuple) -> list:
         visited = set()
         pile = [(start, [])]
     
@@ -782,10 +774,8 @@ class Maze:
             for voisin in self.neighbors[cellule]:
                 if voisin not in visited:
                     pile.append((voisin, chemin + [cellule]))
-    
-    
-
-
+        l=[]
+        return l
 
 
 ###############################################################################
