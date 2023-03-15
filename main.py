@@ -420,8 +420,8 @@ class Maze:
         Returns
         -------
         Maze
-            labyrinthe de la classe maze avec.
-
+            Génère un labyrinthe choisissant aléatoirement entre casser
+            le mur EST ou le mur SUD
         """
         assert type(h)==type(w)==int , \
             f"erreur de type de donnée : {h} ou {w} n'est pas un entier"
@@ -432,7 +432,6 @@ class Maze:
             for j in range(w-1):
                 lst.append((i,j))
                 valAl = randint(0,1)
-                derCell = (i,j)
                 #Si valAl = 0 on retire le mur EST
                 if valAl == 0:
                     lab.neighbors[(i, j)].add((i, j+1))
@@ -443,7 +442,7 @@ class Maze:
                     lab.neighbors[(x, y)].add((x+1, y))
                     lab.neighbors[(x+1, y)].add((x, y))
                     lst = []
-            lst.append(derCell)
+            lst.append((i, lab.width-1))
             (x,y) = lst[randint(0,len(lst)-1)]
             lab.neighbors[(x, y)].add((x+1, y))
             lab.neighbors[(x+1, y)].add((x, y))
@@ -517,7 +516,8 @@ class Maze:
         Returns
         -------
         Maze
-            labyrinthe de la classe maze avec.
+            Génère un labyrinthe cassant les murs à mesure qu'on avance et
+            à la manière d'un parcours en profondeur.
 
         """
         assert type(h)==type(w)==int , \
@@ -572,8 +572,8 @@ class Maze:
         Returns
         -------
         Maze
-            labyrinthe de la classe maze avec.
-
+            Génère un labyrinthe comme si un serpent avait creusé dans le labyrinthe
+            à partir d'un point de dépar aléatoire et jusqu'à un endroit déjà creusé.
         """
         assert type(h)==type(w)==int , \
             f"erreur de type de donnée : {h} ou {w} n'est pas un entier"
@@ -740,6 +740,32 @@ class Maze:
 
 
 ###    6.2
+
+    def solve_rhr(start:tuple , stop:tuple) ->list:
+        """
+        
+
+        Parameters
+        ----------
+        start : tuple
+            coordonnée de depart.
+        stop : tuple
+            coordonnée d'arrivée.
+            
+        Returns
+        -------
+        list
+            Recherche le chemin le plus rapide pour atteindre le départ en partant
+            de l'arrivée dans un labyrinthe sans murs.
+        """
+        assert type(start[0]) == type(start[1]) == type(stop[0])  == type(stop[1])  ==int  and \
+                type(start )== type(stop)==tuple , \
+            f"Erreur lors de la verification des types des attributs  : type de donnée non adéquat"
+        
+        l=[]
+        
+        return l
+
 
 
     def solve_rhr(self, start: tuple, stop: tuple) -> list:
