@@ -1,5 +1,4 @@
-from random import *
-
+from random import randint,shuffle,choice
 
 ### Burlot Brice, Hales Nadhir
 
@@ -659,7 +658,7 @@ class Maze:
         """
         assert type(start[0]) == type(start[1]) == type(stop[0])  == type(stop[1])  ==int  and \
                 type(start )== type(stop)==tuple , \
-            f"Erreur lors de la verification des types des attributs  : type de donnée non adéquat"
+                    f"Erreur lors de la verification des types des attributs  : type de donnée non adéquat"
             
         #initialisation
         pile = [start]
@@ -769,6 +768,22 @@ class Maze:
 
 
 
+    def solve_rhr(self, start: tuple, stop: tuple) -> list:
+        visited = set()
+        pile = [(start, [])]
+    
+        while pile:
+            cellule, chemin = pile.pop()
+    
+            if cellule == stop:
+                return chemin + [cellule] #renvoie le chemin ici 
+    
+            visited.add(cellule)
+            for voisin in self.neighbors[cellule]:
+                if voisin not in visited:
+                    pile.append((voisin, chemin + [cellule]))
+    
+    
 
 
 
@@ -873,7 +888,9 @@ class color:
 
 """
 
-Permet l'affichage en couleurs
+Permet l'affichage en couleurs 
+
+ documentation : https://blogs.mtdv.me/blog/posts/documentation-color
 
 """
 
@@ -975,7 +992,7 @@ str_solution = {c:'*' for c in solution}
 str_solution[( 0,  0)] = 'D'
 str_solution[(14, 14)] = 'A'
 
-print(laby.overlay(str_solution), "parcours en profondeur")
+print(laby.overlay(str_solution), "parcours en profondeur  \n\n")
 
 
 solution = laby.solve_bfs((0, 0), (14, 14))
@@ -983,6 +1000,14 @@ str_solution = {c:'*' for c in solution}
 str_solution[( 0,  0)] = 'D'
 str_solution[(14, 14)] = 'A'
 print(laby.overlay(str_solution),"parcours en largeur \n\n")
+
+
+laby = Maze.gen_exploration(15, 15)
+solution = laby.solve_rhr((0, 0),(14, 14))
+str_solution = {c:'*' for c in solution}
+str_solution[( 0,  0)] = 'D'
+str_solution[(14, 14)] = 'A'
+print(laby.overlay(str_solution), 'main droite')
 
 
 
